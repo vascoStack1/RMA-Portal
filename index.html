@@ -776,6 +776,8 @@
     .modal-terminal-type { font-size: 17px; }
   }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>emailjs.init('ws9fvhLuXCmcemPsx');</script>
 </head>
 <body>
 
@@ -1527,41 +1529,33 @@ function submitRequest() {
   btn.classList.add('btn-loading');
   btn.disabled = true;
 
-  const payload = {
+  const templateParams = {
     company: document.getElementById('f-company').value,
     contact: document.getElementById('f-contact').value,
     email: document.getElementById('f-email').value,
-    address: {
-      street: document.getElementById('f-street').value,
-      number: document.getElementById('f-number').value,
-      zip: document.getElementById('f-zip').value,
-      city: document.getElementById('f-city').value,
-      country: document.getElementById('f-country').value,
-    },
-    terminals: terminals.map(t => ({
-      sn: t.sn,
-      type: t.type,
-      reason: reasons[t.sn],
-      description: descriptions[t.sn]
-    }))
+    address: `${document.getElementById('f-street').value} ${document.getElementById('f-number').value}, ${document.getElementById('f-zip').value} ${document.getElementById('f-city').value}`,
+    sns: terminals.map(t => t.sn).join(', '),
+    terminals: terminals.map(t =>
+      `- SN: ${t.sn} | Type: ${t.type} | Reason: ${reasons[t.sn]} | Description: ${descriptions[t.sn]}`
+    ).join('\n'),
+    date: new Date().toLocaleString('nl-NL'),
+    name: document.getElementById('f-contact').value
   };
 
-  const ZAPIER_WEBHOOK = 'https://multisafepay.jitbit.com/helpdesk/api/ticket';
-
-  fetch(ZAPIER_WEBHOOK, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  })
-  .catch(() => {}) // fail silently in demo
-  .finally(() => {
-    btn.classList.remove('btn-loading');
-    const ref = 'RMA-2026-' + String(Math.floor(Math.random() * 9000) + 1000);
-    document.getElementById('ticket-ref').textContent = ref;
-    showScreen('success');
-    document.getElementById('btn-continue').style.display = 'none';
-    document.getElementById('btn-back').style.display = 'none';
-  });
+  emailjs.send('service_tnn2aqy', 'template_pz5caee', templateParams)
+    .then(() => {
+      const ref = 'RMA-2026-' + String(Math.floor(Math.random() * 9000) + 1000);
+      document.getElementById('ticket-ref').textContent = ref;
+      showScreen('success');
+      document.getElementById('btn-continue').style.display = 'none';
+      document.getElementById('btn-back').style.display = 'none';
+    })
+    .catch((error) => {
+      console.error('EmailJS error:', error);
+      btn.classList.remove('btn-loading');
+      btn.disabled = false;
+      alert('Something went wrong sending your request. Please try again.');
+    });
 }
 
 function resetPortal() {
