@@ -513,17 +513,15 @@
   @media (max-width: 480px) { .success-title { font-size: 18px; } }
   .success-sub { font-size: 15px; color: var(--text-secondary); margin-bottom: 28px; line-height: 1.5; }
   @media (max-width: 480px) { .success-sub { font-size: 13px; margin-bottom: 20px; } }
-  .ticket-ref {
-    display: inline-block;
-    font-family: 'Roboto Mono', monospace;
-    font-size: 20px;
-    font-weight: 500;
-    color: var(--accent);
-    background: var(--accent-light);
-    padding: 10px 20px;
-    border-radius: 8px;
+  .success-ref {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.7;
     margin-bottom: 28px;
-    letter-spacing: 1px;
+    padding: 16px 24px;
+    background: var(--accent-light);
+    border-radius: 8px;
+    display: inline-block;
   }
 
   /* ── BOTTOM BAR ── */
@@ -995,7 +993,10 @@
       <div class="success-icon">✓</div>
       <h2 class="success-title">RMA request submitted</h2>
       <p class="success-sub">Your request has been received. A ticket has been created in our system.<br/>You will receive a confirmation email with your return label shortly.</p>
-      <div class="ticket-ref" id="ticket-ref">RMA-2026-0001</div>
+      <div class="success-ref">
+        Your request has been received by our support team.<br/>
+        You will be contacted within 1 business day.
+      </div>
       <div>
         <button class="btn btn-primary" onclick="resetPortal()">Submit another request</button>
       </div>
@@ -1544,8 +1545,6 @@ function submitRequest() {
 
   emailjs.send('service_tnn2aqy', 'template_pz5caee', templateParams)
     .then(() => {
-      const ref = 'RMA-2026-' + String(Math.floor(Math.random() * 9000) + 1000);
-      document.getElementById('ticket-ref').textContent = ref;
       showScreen('success');
       document.getElementById('btn-continue').style.display = 'none';
       document.getElementById('btn-back').style.display = 'none';
