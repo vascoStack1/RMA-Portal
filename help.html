@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Help — MultiSafepay RMA Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  @font-face {
+    font-family: 'CocoSharp';
+    src: url('https://www.multisafepay.com/wp-content/themes/multisafepay/fonts/CocoSharp-Bold.woff2') format('woff2');
+    font-weight: 700;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary: #003057;
+    --accent: #0EAAF1;
+    --bg: #F0F4F8;
+    --surface: #FFFFFF;
+    --border: #D6E4EF;
+    --text-primary: #0D1E2E;
+    --text-secondary: #4A6580;
+    --text-muted: #7B8E9F;
+    --accent-light: rgba(14,170,241,0.16);
+    --radius: 14px;
+    --shadow: 0 1px 3px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.08);
+  }
+
+  body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--bg);
+    background-image:
+      linear-gradient(145deg, rgba(255,255,255,0.92), rgba(14,170,241,0.08) 55%, rgba(255,255,255,0.94)),
+      repeating-linear-gradient(135deg, rgba(14,170,241,0.06) 0px, rgba(14,170,241,0.06) 1px, transparent 1px, transparent 24px);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    min-height: 100vh;
+  }
+
+  h1, h2, h3 { font-family: 'CocoSharp', sans-serif; font-weight: 700; }
+
+  /* NAV */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-left { display: flex; align-items: center; gap: 12px; }
+  .nav-left img { display: block; height: 28px; width: auto; }
+  .nav-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+  .nav-center span {
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'CocoSharp', sans-serif;
+    color: var(--primary);
+    letter-spacing: -0.02em;
+  }
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .back-link:hover { text-decoration: underline; }
+
+  /* MAIN */
+  .main { max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  .page-title {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+  }
+  .page-subtitle {
+    font-size: 15px;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: 40px;
+    line-height: 1.5;
+  }
+
+  /* SECTION CARDS */
+  .sections { display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }
+
+  .section-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-left: 6px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .section-icon {
+    width: 40px; height: 40px;
+    background: var(--accent-light);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .section-body h3 {
+    font-size: 15px;
+    font-family: 'CocoSharp', sans-serif;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+  }
+  .section-body p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 6px;
+  }
+  .section-body p:last-child { margin-bottom: 0; }
+
+  /* STEPS */
+  .steps { list-style: none; margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+  .steps li {
+    font-size: 14px;
+    color: var(--text-secondary);
+    padding-left: 18px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .steps li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 12px;
+    top: 2px;
+  }
+
+  /* PROCESS TIMELINE */
+  .timeline-section {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .timeline-header {
+    padding: 14px 20px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'CocoSharp', sans-serif;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .timeline-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .timeline-row:last-child { border-bottom: none; }
+  .timeline-step {
+    width: 28px; height: 28px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'CocoSharp', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .timeline-content strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 3px;
+  }
+  .timeline-content span {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* INFO / CONTACT BANNER */
+  .info-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 18px;
+    background: #f0f4ff;
+    border: 1px solid #c5d4fc;
+    border-radius: 10px;
+    font-size: 13px;
+    color: #1e3a8a;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+  .info-note svg { flex-shrink: 0; margin-top: 1px; }
+
+  .contact-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+  .contact-icon {
+    width: 44px; height: 44px;
+    background: var(--accent-light);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .contact-body strong {
+    display: block;
+    font-family: 'CocoSharp', sans-serif;
+    font-size: 15px;
+    margin-bottom: 4px;
+    color: var(--text-primary);
+  }
+  .contact-body p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+  .contact-body a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .contact-body a:hover { text-decoration: underline; }
+
+  /* BACK BUTTON */
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 10px 22px;
+    background: var(--accent);
+    color: var(--primary);
+    border: none;
+    border-radius: 8px;
+    font-family: 'CocoSharp', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background .15s;
+  }
+  .back-btn:hover { background: #0d9fd8; }
+
+  @media (max-width: 480px) {
+    nav { padding: 0 16px; }
+    .main { padding: 28px 16px 60px; }
+    .page-title { font-size: 22px; }
+    .section-card { padding: 18px 20px; gap: 14px; }
+    .contact-card { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .timeline-row { padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <img src="logo.png" alt="MultiSafepay" height="28"/>
+  </div>
+  <div class="nav-center">
+    <span>MultiSafepay RMA Portal</span>
+  </div>
+  <a href="index.html" class="back-link">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    Back to portal
+  </a>
+</nav>
+
+<div class="main">
+  <h1 class="page-title">Help & frequently asked questions</h1>
+  <p class="page-subtitle">Everything you need to know about submitting and tracking an RMA request.</p>
+
+  <div class="sections">
+
+    <div class="section-card">
+      <div class="section-icon">📦</div>
+      <div class="section-body">
+        <h3>What is an RMA request?</h3>
+        <p>RMA stands for <strong>Return Merchandise Authorisation</strong>. It is the official process for returning a faulty or incorrect terminal to MultiSafepay so it can be repaired or replaced.</p>
+        <p>You can use this portal to register your return request. Once submitted, our support team will review it and send you a prepaid return label within 1 business day.</p>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-icon">🔢</div>
+      <div class="section-body">
+        <h3>What do I need to submit a request?</h3>
+        <ul class="steps">
+          <li>The <strong>serial number(s)</strong> of the terminal(s) you want to return — always 13 characters, found on the back label or in the device settings</li>
+          <li>A brief <strong>description of the problem</strong> for each device</li>
+          <li>Your <strong>company name, contact person</strong> and <strong>email address</strong></li>
+          <li>A <strong>shipping address</strong> where we can send the replacement or repaired terminal</li>
+        </ul>
+        <p style="margin-top:10px;">
+          <a href="serial-number-help.html" style="color:var(--accent);font-weight:500;font-size:13px;text-decoration:none;">
+            Where do I find the serial number? →
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-icon">✅</div>
+      <div class="section-body">
+        <h3>Which terminals can be returned?</h3>
+        <p>You can return any terminal that was supplied by MultiSafepay, including the P3 Air, P3H, P3KH, P3 Mix, P2 Pro, P2 Mini, P2 SE, P2 Lite SE, and P2 SmartPads.</p>
+        <p>If your terminal model is not recognised by the portal, please contact our support team directly.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="timeline-section">
+    <div class="timeline-header">What happens after I submit?</div>
+    <div class="timeline-row">
+      <div class="timeline-step">1</div>
+      <div class="timeline-content">
+        <strong>Request received</strong>
+        <span>Your RMA request is received by our support team and a ticket is created in our system.</span>
+      </div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-step">2</div>
+      <div class="timeline-content">
+        <strong>Return label sent (within 1 business day)</strong>
+        <span>We will email you a prepaid return label and instructions on how to package and ship the device.</span>
+      </div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-step">3</div>
+      <div class="timeline-content">
+        <strong>Ship the terminal</strong>
+        <span>Pack the terminal securely and drop it off at the specified carrier location. Use the label we provided.</span>
+      </div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-step">4</div>
+      <div class="timeline-content">
+        <strong>Assessment & resolution</strong>
+        <span>Once we receive the device, we assess it and arrange a repair or replacement. You will be kept informed via email.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-note">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 11a1 1 0 110-2 1 1 0 010 2zm1-3.5H7V5h2v3.5z"/></svg>
+    Make sure the email address you provide is correct — we will use it to send your return label and any further communication about your request.
+  </div>
+
+  <div class="contact-card">
+    <div class="contact-icon">💬</div>
+    <div class="contact-body">
+      <strong>Still have a question?</strong>
+      <p>Our support team is happy to help. Reach out via our <a href="https://www.multisafepay.com/contact" target="_blank">contact page</a> or email us at <a href="mailto:support@multisafepay.com">support@multisafepay.com</a>.</p>
+    </div>
+  </div>
+
+  <a href="index.html" class="back-btn">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    Back to RMA Portal
+  </a>
+</div>
+
+</body>
+</html>
