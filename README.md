@@ -3,7 +3,7 @@
 A self-service portal for merchants and partners to submit RMA (Return Merchandise Authorization) requests for POS terminals.
 
 ## Live
-[https://craigymaster.github.io/RMA-Portal/](https://craigymaster.github.io/RMA-Portal/)
+[[https://craigymaster.github.io/RMA-Portal/](https://craigymaster.github.io/RMA-Portal/)](https://vascostack1.github.io/RMA-Portal/)
 
 ## What it does
 - Merchant enters a serial number → terminal type is automatically detected via SN prefix
