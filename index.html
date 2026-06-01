@@ -1027,8 +1027,12 @@
       <div class="form-field">
         <label>What seems to be the problem? <span class="required">*</span></label>
         <div class="modal-reason-group" id="modal-reason-group"></div>
+        <textarea id="other-desc-modal"
+          placeholder="Please describe the reason for your return request…"
+          style="display:none; margin-top:10px"
+          oninput="updateModalBtn(); this.style.borderColor=''"></textarea>
       </div>
-      <div class="form-field">
+      <div class="form-field" id="modal-desc-field">
         <label>Problem description <span class="required">*</span></label>
         <textarea id="modal-desc" placeholder="Describe the issue as specifically as possible…" oninput="updateModalBtn()"></textarea>
       </div>
@@ -1236,15 +1240,32 @@ function openReasonModal(index) {
     'Broken - Display broken',
     'Broken - Chip reader broken/not reading cards',
     'Use Magstripe error',
+    'Other',
   ];
   const group = document.getElementById('modal-reason-group');
-  const selected = reasons[t.sn] || '';
+  const storedReason = reasons[t.sn] || '';
+  const isOtherStored = storedReason.startsWith('Other: ');
+  const selected = isOtherStored ? 'Other' : storedReason;
   group.innerHTML = reasonOptions.map(opt => `
     <div class="modal-reason-option${selected === opt ? ' selected' : ''}" data-reason="${opt}">
       <div class="modal-reason-radio"><div class="modal-reason-radio-inner"></div></div>
       <span>${opt}</span>
     </div>
   `).join('');
+
+  const otherTextarea = document.getElementById('other-desc-modal');
+  const descField = document.getElementById('modal-desc-field');
+  const isOtherActive = isOtherStored || storedReason === 'Other';
+  if (isOtherStored) {
+    otherTextarea.value = storedReason.slice(7);
+    otherTextarea.style.display = 'block';
+  } else if (storedReason === 'Other') {
+    otherTextarea.style.display = 'block';
+  } else {
+    otherTextarea.value = '';
+    otherTextarea.style.display = 'none';
+  }
+  descField.style.display = isOtherActive ? 'none' : '';
 
   document.getElementById('modal-desc').value = descriptions[t.sn] || '';
   updateModalBtn();
@@ -1259,6 +1280,17 @@ function selectModalReason(value) {
     const isSelected = el.querySelector('span').textContent === value;
     el.classList.toggle('selected', isSelected);
   });
+  const otherTextarea = document.getElementById('other-desc-modal');
+  const descField = document.getElementById('modal-desc-field');
+  if (value === 'Other') {
+    otherTextarea.style.display = 'block';
+    descField.style.display = 'none';
+  } else {
+    otherTextarea.style.display = 'none';
+    otherTextarea.value = '';
+    otherTextarea.style.borderColor = '';
+    descField.style.display = '';
+  }
   updateModalBtn();
 }
 
@@ -1268,14 +1300,28 @@ function closeReasonModal() {
 }
 
 function updateModalBtn() {
-  const reason = reasons[terminals[currentModalIndex]?.sn];
-  const desc = document.getElementById('modal-desc').value.trim();
-  document.getElementById('modal-continue-btn').disabled = !reason || !desc;
+  const sn = terminals[currentModalIndex]?.sn;
+  const reason = reasons[sn];
+  const isOther = reason === 'Other' || (reason && reason.startsWith('Other: '));
+  const ok = isOther
+    ? document.getElementById('other-desc-modal').value.trim().length > 0
+    : document.getElementById('modal-desc').value.trim().length > 0;
+  document.getElementById('modal-continue-btn').disabled = !reason || !ok;
 }
 
 function submitModalReason() {
   const t = terminals[currentModalIndex];
-  descriptions[t.sn] = document.getElementById('modal-desc').value;
+  if (reasons[t.sn] === 'Other') {
+    const otherContent = document.getElementById('other-desc-modal').value.trim();
+    if (!otherContent) {
+      document.getElementById('other-desc-modal').style.borderColor = 'var(--error)';
+      return;
+    }
+    reasons[t.sn] = 'Other: ' + otherContent;
+    descriptions[t.sn] = otherContent;
+  } else {
+    descriptions[t.sn] = document.getElementById('modal-desc').value;
+  }
 
   if (currentModalIndex < terminals.length - 1) {
     openReasonModal(currentModalIndex + 1);
